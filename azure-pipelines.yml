@@ -98,11 +98,12 @@ stages:
   
         steps:
           - script: |
-              echo "✅ Compilación exitosa"
-              echo "✅ Tests ejecutados"
-              echo "✅ Cobertura publicada"
-              echo "✅ Pipeline listo para aprobación"
-            displayName: 'Validaciones Finales'
+              echo "Verificando reporte de cobertura..."
+  
+              test -f build/reports/jacoco/test/jacocoTestReport.xml
+  
+              echo "Reporte de cobertura encontrado"
+            displayName: 'Verificar Cobertura'
 
 # ==========================================
 # STAGE 2: APROBACIÓN MANUAL (APPROVAL)
