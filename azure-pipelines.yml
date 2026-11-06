@@ -84,18 +84,39 @@ stages:
               summaryFileLocation: '$(System.DefaultWorkingDirectory)/**/build/reports/jacoco/test/jacocoTestReport.xml'
               pathToSources: '$(System.DefaultWorkingDirectory)/src/main/java'
             displayName: 'Publicar Cobertura en Azure DevOps'
-
-  # ==========================================
-  # STAGE 2: APROBACIÓN MANUAL (APPROVAL)
-  # ==========================================
-  - stage: Approval
-    displayName: 'Aprobar'
+# ==========================================
+# STAGE nuevo: QUALITY GATE
+# ==========================================
+  - stage: QualityGate
+    displayName: 'Quality Gate'
     dependsOn: CI
     condition: succeeded()
+  
+    jobs:
+      - job: quality_gate
+        displayName: 'Validación de Calidad'
+  
+        steps:
+          - script: |
+              echo "✅ Compilación exitosa"
+              echo "✅ Tests ejecutados"
+              echo "✅ Cobertura publicada"
+              echo "✅ Pipeline listo para aprobación"
+            displayName: 'Validaciones Finales'
+
+# ==========================================
+# STAGE 2: APROBACIÓN MANUAL (APPROVAL)
+# ==========================================
+  - stage: Approval
+    displayName: 'Aprobar'
+    dependsOn: QualityGate
+    condition: succeeded()
+  
     jobs:
       - job: manual_gate
         displayName: 'Esperando aprobación'
         pool: server
+  
         steps:
           - task: ManualValidation@0
             inputs:
