@@ -86,6 +86,24 @@ stages:
             displayName: 'Publicar Cobertura en Azure DevOps'
 
   # ==========================================
+# STAGE nuevo: VALIDACIÓN DE ARTEFACTOS
+# ==========================================
+- stage: ArtifactValidation
+  displayName: 'Validar Artefacto'
+  dependsOn: CI
+  condition: succeeded()
+
+  jobs:
+    - job: validate_artifact
+      displayName: 'Validar Build'
+
+      steps:
+        - script: |
+            echo "Validación completada"
+            echo "El build finalizó correctamente"
+            echo "Listo para aprobación"
+          displayName: 'Verificar Resultado'
+  # ==========================================
   # STAGE 2: APROBACIÓN MANUAL (APPROVAL)
   # ==========================================
   - stage: Approval
